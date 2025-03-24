@@ -1,4 +1,5 @@
 from tkinter import BOTH, Canvas, Tk
+from lines import Point, Line
 
 # Window class
 
@@ -11,6 +12,9 @@ class Window:
         self.__canvas.pack(fill=BOTH, expand=True)
         self.__running = False
         self.__root.protocol("WM_DELETE_WINDOW", self.close)
+
+    def draw_line(self, line, fill_color):
+        line.draw(self.__canvas, fill_color=fill_color)
 
     def redraw(self):
         self.__root.update_idletasks()
@@ -27,6 +31,17 @@ class Window:
 
 def main():
     win = Window(800, 600)
+
+    pointA_1 = Point(1, 1)
+    pointB_1 = Point(70, 70)
+    line1 = Line(pointA_1, pointB_1)
+    
+    pointA_2 = Point(55, 43)
+    pointB_2 = Point(236, 70)
+    line2 = Line(pointA_2, pointB_2)
+
+    win.draw_line(line1, "black")
+    win.draw_line(line2, "red")
     win.wait_for_close()
 
 
