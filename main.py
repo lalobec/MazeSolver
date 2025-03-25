@@ -1,5 +1,6 @@
 from tkinter import BOTH, Canvas, Tk
 from lines import Point, Line
+from cell import Cell
 
 # Window class
 
@@ -35,10 +36,17 @@ def main():
     pointA_1 = Point(1, 1)
     pointB_1 = Point(70, 70)
     line1 = Line(pointA_1, pointB_1)
-    
+
     pointA_2 = Point(55, 43)
     pointB_2 = Point(236, 70)
     line2 = Line(pointA_2, pointB_2)
+
+    cell1 = Cell(100, 300, 450, 550, win)
+    cell1.draw()
+    cell2 = Cell(150, 350, 350, 450, win)
+    cell2.draw()
+    cell3 = Cell(100, 300, 450, 550, win)
+    cell3.draw()
 
     win.draw_line(line1, "black")
     win.draw_line(line2, "red")
