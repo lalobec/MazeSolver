@@ -1,56 +1,25 @@
-from tkinter import BOTH, Canvas, Tk
-from lines import Point, Line
-from cell import Cell
-
-# Window class
-
-
-class Window:
-    def __init__(self, width, height):
-        self.__root = Tk()
-        self.__root.title("Maze Solver")
-        self.__canvas = Canvas(self.__root, width=width, height=height)
-        self.__canvas.pack(fill=BOTH, expand=True)
-        self.__running = False
-        self.__root.protocol("WM_DELETE_WINDOW", self.close)
-
-    def draw_line(self, line, fill_color):
-        line.draw(self.__canvas, fill_color=fill_color)
-
-    def redraw(self):
-        self.__root.update_idletasks()
-        self.__root.update()
-
-    def wait_for_close(self):
-        self.__running = True
-        while self.__running:
-            self.redraw()
-
-    def close(self):
-        self.__running = False
+from maze import Maze
+from window import Window
 
 
 def main():
+    num_rows = 5
+    num_cols = 5
+    cell_size_x = 50
+    cell_size_y = 50
+    maze_pos_x = 20
+    maze_pos_y = 20
+
     win = Window(800, 600)
+    maze = Maze(
+        maze_pos_x,
+        maze_pos_y,
+        num_rows,
+        num_cols,
+        cell_size_x,
+        cell_size_y,
+        win)
 
-#    pointA_1 = Point(1, 1)
-#    pointB_1 = Point(70, 70)
-#    line1 = Line(pointA_1, pointB_1)
-
-#    pointA_2 = Point(55, 43)
-#    pointB_2 = Point(236, 70)
-#    line2 = Line(pointA_2, pointB_2)
-
-    cell1 = Cell(win)
-    cell1.draw(100, 300, 450, 550)
-    cell2 = Cell(win)
-    cell2.has_left_wall = False
-    cell2.draw(150, 350, 350, 450)
-    cell3 = Cell(win)
-    cell3.draw(100, 300, 450, 550)
-
-#    win.draw_line(line1, "black")
-#    win.draw_line(line2, "red")
     win.wait_for_close()
 
 
