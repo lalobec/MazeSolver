@@ -20,8 +20,11 @@ def main():
         cell_size_x,
         cell_size_y,
         win,
-        10)
-    maze.solve()
+        )
+    if maze.solve():
+        print("Maze solved!")
+    else:
+        print("The maze does not have solution")
 
     win.wait_for_close()
 
