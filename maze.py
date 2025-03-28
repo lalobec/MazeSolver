@@ -73,25 +73,55 @@ class Maze:
                 ni, nj = i + di, j + dj
                 if 0 <= ni < self._num_rows and 0 <= nj < self._num_cols:
                     if not self._cells[ni][nj].visited:
-                        cells_to_visit.append((ni, nj))
+                        cells_to_visit.append((ni, nj, di, dj))
             if cells_to_visit == []:
+                self._draw_cell(i, j)
                 return
-            m, n = random.choice(cells_to_visit)
+            ni, nj, di, dj = random.choice(cells_to_visit)
             direction_map = {
-                (0, -1): ("has_left_wall", "has_right_wall"),
-                (0, 1): ("has_right_wall", "has_left_wall"),
-                (-1, 0): ("has_top_wall", "has_bottom_wall"),
-                (1, 0): ("has_bottom_wall", "has_top_wall")
+                (0, -1): ("has_top_wall", "has_bottom_wall"),
+                (0, 1): ("has_bottom_wall", "has_top_wall"),
+                (-1, 0): ("has_left_wall", "has_right_wall"),
+                (1, 0): ("has_right_wall", "has_left_wall")
             }
 
-            di, dj = m-i, n-j
             current_wall, neighbor_wall = direction_map[(di, dj)]
             setattr(self._cells[i][j], current_wall, False)
-            setattr(self._cells[m][n], neighbor_wall, False)
-            self._draw_cell(m, n)
-            self._break_walls_r(m, n)
+            setattr(self._cells[ni][nj], neighbor_wall, False)
+            self._break_walls_r(ni, nj)
 
     def _reset_cells_visited(self):
         for i in range(self._num_rows):
             for j in range(self._num_cols):
                 self._cells[i][j].visited = False
+
+    def solve(self):
+        if self._solve_r(0, 0):
+            return True
+        return False
+
+    def _solve_r(self, i, j):
+        self._animate()
+        self._cells[i][j].visited = True
+        if i == self._num_rows-1 and j == self._num_cols-1:
+            return True
+        directions = [(-1, 0), (1, 0), (0, -1), (0, 1)]
+        direction_map = {
+                (0, -1): ("has_top_wall", "has_bottom_wall"),
+                (0, 1): ("has_bottom_wall", "has_top_wall"),
+                (-1, 0): ("has_left_wall", "has_right_wall"),
+                (1, 0): ("has_right_wall", "has_left_wall")
+            }
+        for di, dj in directions:
+            current_wall, neighbor_wall = direction_map[(di, dj)]
+            ni, nj = i + di, j + dj
+            if 0 <= ni < self._num_rows and 0 <= nj < self._num_cols:
+                if (getattr(self._cells[i][j], current_wall) is False
+                        and getattr(self._cells[ni][nj], neighbor_wall) is False
+                        and self._cells[ni][nj].visited is False):
+                    self._cells[i][j].draw_move(self._cells[ni][nj])
+                    if self._solve_r(ni, nj):
+                        return True
+                    else:
+                        self._cells[i][j].draw_move(self._cells[ni][nj], undo=True)
+        return False
