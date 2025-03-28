@@ -27,6 +27,7 @@ class Maze:
         self._create_cells()
         self._break_entrance_and_exit()
         self._break_walls_r(0, 0)
+        self._reset_cells_visited()
 
     def _create_cells(self):
         self._cells = []
@@ -50,7 +51,6 @@ class Maze:
         cell_y2 = cell_y1 + self._cell_size_y
 
         cell = self._cells[i][j]
-        print(f"Creating a new cell at {i}, {j}")
         cell.draw(cell_x1, cell_y1, cell_x2, cell_y2)
         self._animate()
 
@@ -90,25 +90,8 @@ class Maze:
             setattr(self._cells[m][n], neighbor_wall, False)
             self._draw_cell(m, n)
             self._break_walls_r(m, n)
-            """
-            if m == i and n < j:
-                self._cells[m][n].has_right_wall = False
-                self._cells[i][j].has_left_wall = False
-                self._draw_cell(m, n)
-                self._break_walls_r(m, n)
-            if m == i and n > j:
-                self._cells[m][n].has_left_wall = False
-                self._cells[i][j].has_right_wall = False
-                self._draw_cell(m, n)
-                self._break_walls_r(m, n)
-            if m < i and n == j:
-                self._cells[m][n].has_bottom_wall = False
-                self._cells[i][j].has_top_wall = False
-                self._draw_cell(m, n)
-                self._break_walls_r(m, n)
-            if m > i and n == j:
-                self._cells[m][n].has_top_wall = False
-                self._cells[i][j].has_bottom_wall = False
-                self._draw_cell(m, n)
-                self._break_walls_r(m, n)
-"""
+
+    def _reset_cells_visited(self):
+        for i in range(self._num_rows):
+            for j in range(self._num_cols):
+                self._cells[i][j].visited = False
